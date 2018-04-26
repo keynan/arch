@@ -4,7 +4,7 @@ I use Arch Linux and Xmonad/Xmobar is my desktop environment.
 
 Arch installation instructions and user configuration for desktop, laptop and embedded usage.
 
-![xmonad screenshot](/ss.png?raw=true "xmonad in action!")
+![xmonad screenshot](/.github/ss.png?raw=true "xmonad in action!")
 
 ## Usage
 
