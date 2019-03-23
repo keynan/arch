@@ -98,11 +98,11 @@ cat /boot/kargs
 ##
 ##Append `vconsole.font=ter-v32n` to kargs.
 
-echo "Adding terminus fonts"
+#echo "Adding terminus fonts"
 yes | pacman -S terminus-font
-KARGS=$(cat /boot/kargs)
-echo "$KARGS vconsole.font=ter-v32n" > /boot/kargs
+#KARGS=$(cat /boot/kargs)
+#echo "$KARGS vconsole.font=ter-v32n" > /boot/kargs
 
-echo "kargs still check out?"
-cat /boot/kargs
+#echo "kargs still check out?"
+#cat /boot/kargs
 
