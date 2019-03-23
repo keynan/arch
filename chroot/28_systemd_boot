@@ -1,0 +1,47 @@
+##### Alternative: systemd-boot
+##
+##Some terribad UEFI implementations such as Dell 5520 don't want to boot directly from UEFI; they only seem to support booting from an .efi file, hence we use systemd-boot.
+##
+##```sh
+##bootctl --path=/boot install
+##```
+##
+
+bootctl --path=/boot install
+
+##Edit `/boot/loader/loader.conf` and change its contents to:
+##```
+##default arch
+##timeout 1
+##```
+##
+
+cat /boot/loader/loader.conf <<EOF
+default arch
+timeout 1
+EOF
+
+##Add `/boot/loader/entries/arch.conf`, using `/boot/kargs` for options, with initrd moved up:
+##
+##```
+##title Arch Linux
+##linux /vmlinuz-linux
+##initrd /intel-ucode.img
+##initrd /initramfs-linux.img
+##options cryptdevice=UUID=b874fabd-ae06-485e-b858-6532cec92d3c:cryptlvm root=/dev/vg1/archroot rootflags=subvol=/@root resume=/dev/vg1/archswap pcie_aspm=off rw
+##```
+##
+
+LUKSUUID=$(blkid -s UUID -o value /dev/nvme0n1p2)
+
+mkdir -p /boot/loader/entries/
+cat /boot/loader/entries/arch.conf <<EOF
+title Arch Linux
+linux /vmlinuz-linux
+initrd /intel-ucode.img
+initrd /initramfs-linux.img
+options cryptdevice=UUID=$LUKSUUID:cryptlvm root=/dev/vg1/archroot rootflags=subvol=/@root resume=/dev/vg1/archswap pcie_aspm=off rw
+EOF
+
+
+

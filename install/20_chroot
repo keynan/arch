@@ -4,7 +4,7 @@ set -e
 
 if [[ ! -e /mnt/root/arch ]] ; then 
 	git clone /root/arch /mnt/root/arch
-	cd /root/arch
+	cd /mnt/root/arch
 	git remote rm origin
 	git remote add origin https://github.com/keynan/arch.git
 	git checkout master

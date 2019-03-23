@@ -60,17 +60,19 @@ if [[ ! -e /etc/mkinitcpio.conf.bak ]]; then
 fi
 
 echo "Rewriting HOOKS in /etc/mkinitcpio.conf"
+OLD=""
 REPLACEMENT="HOOKS=(base udev autodetect modconf block keyboard mdadm_udev encrypt lvm2 filesystems resume fsck usr shutdown)"
 while IFS='' read -r line || [[ -n "$line" ]]; do
     if [[ $(echo $line | grep "^HOOKS") ]]; then
-		echo "OLD: $line"
-		echo "NEW: $REPLACEMENT"
+		OLD=$line
 		echo $REPLACEMENT
 	else
 		echo $line
 	fi
 done < /etc/mkinitcpio.conf.bak > /etc/mkinitcpio.conf
 
+echo "OLD: $line"
+echo "NEW: $REPLACEMENT"
 yes | pacman -S linux
 
 #### Intel CPU Microcode
