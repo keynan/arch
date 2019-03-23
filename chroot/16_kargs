@@ -1,0 +1,108 @@
+#! /bin/bash
+
+set -e
+
+#### EFISTUB Preparation
+##
+##I'm bored with boot loaders and UEFI just doesn't need them. Simply point the EFI boot entry to the ESP, along with the kernel arguments.
+##
+##Copy `bin/efibootstub` from this repository into `/usr/local/bin`
+##
+##Determine the UUID of the your crypto_LUKS volume. Note that it's the raw device, not the crypto volume itself. e.g.
+##
+##`blkid -s UUID -o value /dev/nvme0n1p2`
+##
+##Create kernel command line in `/boot/kargs` e.g.
+##```
+##initrd=\initramfs-linux.img cryptdevice=UUID=b874fabd-ae06-485e-b858-6532cec92d3c:cryptlvm root=/dev/vg1/archroot rootflags=subvol=/@root resume=/dev/vg1/archswap rw quiet
+##```
+##
+##If using Dell 5520, it's necessary to disable PCIe Active State Power Management as per (https://www.thomas-krenn.com/en/wiki/PCIe_Bus_Error_Status_00001100).
+##
+##Append to `/boot/kargs`:
+##```
+##pcie_aspm=off
+##```
+#### Create initrd and kernel
+##
+##Update the boot image configuration: `/etc/mkinitcpio.conf`
+##
+##Add an encrypt hook and move the keyboard configration before it, so that we can type the passphrase.
+##
+##Add lvm2 before filessystems so that we may open the volumes.
+##
+##Add resume hook after filesystems.
+##
+##Add usr and shutdown hooks so that the root filesystem may be retained during shutdown and cleanly unmounted.
+##
+##If using software raid, add mdadm_udev before encrypt.
+##
+##```sh
+##HOOKS=(base udev autodetect modconf block keyboard mdadm_udev encrypt lvm2 filesystems resume fsck usr shutdown)
+##```
+##
+##(Re)generate the boot image:
+##
+##`pacman -S linux`
+
+
+cp /root/arch/home/bin/efibootstub /usr/local/bin/
+
+LUKSUUID=$(blkid -s UUID -o value /dev/nvme0n1p2)
+
+echo "initrd=\initramfs-linux.img cryptdevice=UUID=$LUKSUUID:cryptlvm root=/dev/vg1/archroot rootflags=subvol=/@root resume=/dev/vg1/archswap rw quiet" > /boot/kargs
+
+echo "Do these kargs look right?"
+cat /boot/kargs
+
+if [[ ! -e /etc/mkinitcpio.conf.bak ]]; then
+	cp /etc/mkinitcpio.conf /etc/mkinitcpio.conf.bak
+fi
+
+echo "Rewriting HOOKS in /etc/mkinitcpio.conf"
+REPLACEMENT="HOOKS=(base udev autodetect modconf block keyboard mdadm_udev encrypt lvm2 filesystems resume fsck usr shutdown)"
+while IFS='' read -r line || [[ -n "$line" ]]; do
+    if [[ $(echo $line | grep "^HOOKS") ]]; then
+		echo "OLD: $line"
+		echo "NEW: $REPLACEMENT"
+		echo $REPLACEMENT
+	else
+		echo $line
+	fi
+done < /etc/mkinitcpio.conf.bak > /etc/mkinitcpio.conf
+
+yes | pacman -S linux
+
+#### Intel CPU Microcode
+##
+##Install Intel CPU microcode updater: `pacman -S intel-ucode`
+##
+##Prepend `initrd=\intel-ucode.img ` to `/boot/kargs`.
+##
+
+yes | pacman -S intel-ucode
+
+echo "prepending `initrd=\intel-ucode.img ` to /boot/kargs"
+KARGS=$(cat /boot/kargs)
+echo "initrd=\intel-ucode.img $KARGS" > /boot/kargs
+cat /boot/kargs
+
+
+#### Larger Console Fonts
+##
+##In the case of a laptop with high resolution, it is necessary to increase the font size when using virtual consoles.
+##
+##```
+##pacman -S terminus-font
+##```
+##
+##Append `vconsole.font=ter-v32n` to kargs.
+
+echo "Adding terminus fonts"
+yes | pacman -S terminus-font
+KARGS=$(cat /boot/kargs)
+echo "$KARGS vconsole.font=ter-v32n" > /boot/kargs
+
+echo "kargs still check out?"
+cat /boot/kargs
+

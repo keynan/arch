@@ -1,0 +1,36 @@
+#! /bin/bash
+
+set -e
+
+#### btrfs filesystem drivers
+##
+##`pacman -S btrfs-progs`
+##
+
+yes | pacman -S btrfs-progs
+
+#### Locale And Time
+##
+##Uncomment your desired locale in `/etc/locale.gen`. Also `en_US.UTF-8` as too many things expect it :sigh:.
+##
+##`locale-gen`
+##
+##`echo LANG=en_AU.UTF-8 > /etc/locale.conf`
+##
+
+locale-gen
+
+echo LANG=en_AU.UTF-8 > /etc/locale.conf
+
+##`ln -fs /usr/share/zoneinfo/Australia/Sydney /etc/localtime`
+##
+##`hwclock --systohc --utc`
+##
+
+hwclock --systohc --utc
+
+## Update pacman Packages And Installations To Current
+##
+##`pacman -Suy`
+
+pacman -Suy

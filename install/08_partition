@@ -1,0 +1,70 @@
+#! /bin/bash
+
+set -e
+
+confirm () {
+	read -p "$1 [y/N]: " answer;
+	if [[ $answer == "Y" ]]; then
+		echo "$answer"
+		return 0;
+	else
+		echo "$answer terminating"
+		return 1;
+	fi
+}
+
+RAM_SIZE=32G
+
+# we could present a select menu here
+DRIVES=$(ls /dev | grep "$/nvme")
+
+# Just hardcoded assumption of target
+TARGET=/dev/nvme0n1
+
+if [[ $(confirm "Wipe and re-partition $TARGET ?") ]]; then
+	wipefs --all $TARGET
+	parted /dev/nvme0n1 <<EOF
+mktable GPT
+mkpart ESP fat32 1MiB 513MiB
+set 1 boot on
+name 1 boot
+mkpart primary 513MiB 100%
+name 2 luks
+quit
+EOF
+	
+	mkfs.vfat -n boot -F32 /dev/nvme0n1p1
+	
+	echo "Creating CRYPT volume, expect password prompt."
+	cryptsetup luksFormat --type luks2 /dev/nvme0n1p2
+	
+	echo "Opening CRYPT volume."
+	cryptsetup open /dev/nvme0n1p2 cryptlvm
+	pvcreate /dev/mapper/cryptlvm
+	vgcreate vg1 /dev/mapper/cryptlvm
+	
+	lvcreate -L $RAM_SIZE vg1 -n archswap
+	mkswap /dev/vg1/archswap -L archswap
+	swapon /dev/vg1/archswap
+	
+	lvcreate -l 100%FREE vg1 -n archroot
+	mkfs.btrfs /dev/vg1/archroot -L archroot
+	
+	mount /dev/vg1/archroot /mnt
+	btrfs subvolume create /mnt/@root
+	btrfs subvolume create /mnt/@home
+	btrfs subvolume create /mnt/@docker
+	umount /mnt
+	
+	mount /dev/vg1/archroot /mnt -o subvol=/@root
+	mkdir -p /mnt/home /mnt/boot /mnt/var/lib/docker
+	mount /dev/vg1/archroot /mnt/home -o subvol=/@home
+	mount /dev/vg1/archroot /mnt/var/lib/docker -o subvol=/@docker
+	mount /dev/nvme0n1p1 /mnt/boot
+	
+	echo "Does this partitioning appear correct? (lsblk -f)"
+	lsblk -f 
+else
+	exit 1;
+fi
+

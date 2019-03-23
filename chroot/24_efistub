@@ -1,0 +1,13 @@
+#! /bin/bash
+
+set -e
+
+#### Create The EFISTUB
+##
+##```sh
+##pacman -S efibootmgr
+##efibootstub /dev/nvme0n1 1
+##```
+
+yes | pacman -S efibootmgr
+efibootstub /dev/nvme0n1 1

@@ -1,0 +1,16 @@
+#! /bin/bash
+
+set -e
+
+#### Install And Enable Basic Networking
+##
+##```sh
+##pacman -S openssh networkmanager
+##systemctl enable sshd
+##systemctl enable NetworkManager
+##```
+
+yes | pacman -S openssh networkmanager
+systemctl enable sshd
+systemctl enable NetworkManager
+

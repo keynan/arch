@@ -1,0 +1,19 @@
+#! /bin/bash
+
+set -e
+
+#### Reboot
+##
+##First, install some useful packages to get you going:
+##
+##```sh
+##pacman -S git wget pkgfile
+##pkgfile --update
+##```
+##
+##Exit chroot and reboot
+
+yes | pacman -S git curl wget pkgfile dialog
+pkgfile --update
+
+echo "Exit chroot and reboot"

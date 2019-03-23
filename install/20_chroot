@@ -1,0 +1,28 @@
+#! /bin/bash
+
+set -e
+
+if [[ ! -e /mnt/root/arch ]] ; then 
+	git clone /root/arch /mnt/root/arch
+	cd /root/arch
+	git remote rm origin
+	git remote add origin https://github.com/keynan/arch.git
+	git checkout master
+	git pull origin master
+	git checkout -b install-scripts
+	git pull origin install-scripts
+fi
+
+#### Chroot
+##
+##Make this repo available once you chroot
+##`git clone . /mnt/root/arch`
+##
+##
+##`arch-chroot /mnt /bin/bash`
+##
+
+echo "cd /root/arch"
+arch-chroot /mnt /bin/bash
+
+

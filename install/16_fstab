@@ -1,0 +1,63 @@
+#! /bin/bash
+
+set -e
+
+#### Setup /etc/fstab
+##
+##`genfstab -U /mnt >> /mnt/etc/fstab`
+##
+##Modify `/` for first fsck by setting the last field to 1.
+##
+##Modify `/home`, `/var/lib/docker` and `/boot` for second fsck by setting to 2.
+##
+##`/mnt/etc/fstab` should look something like:
+##```
+### /dev/mapper/vg1-archroot LABEL=archroot
+##UUID=031a2b85-c701-4f2c-bf32-f86d222391ae       /               btrfs           rw,relatime,ssd,space_cache,subvolid=257,subvol=/@root,subvol=@root   0 1
+##
+### /dev/mapper/vg1-archroot LABEL=archroot
+##UUID=031a2b85-c701-4f2c-bf32-f86d222391ae       /home           btrfs           rw,relatime,ssd,space_cache,subvolid=258,subvol=/@home,subvol=@home   0 2
+##
+### /dev/mapper/vg1-archroot LABEL=archroot
+##UUID=031a2b85-c701-4f2c-bf32-f86d222391ae       /var/lib/docker btrfs           rw,relatime,ssd,space_cache,subvolid=259,subvol=/@docker,subvol=@docker       0 2
+##
+### /dev/nvme0n1p1 LABEL=boot
+##UUID=3906-F913          /boot           vfat            rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro     0 2
+##
+### /dev/mapper/vg1-archswap LABEL=archswap
+##UUID=ede007f9-f560-4044-82ca-acf0fbb6824e       none            swap            defaults    0 0
+##```
+
+genfstab -U /mnt > /mnt/etc/fstab.raw
+
+while IFS='' read -r line || [[ -n "$line" ]]; do
+    if [[ $(echo $line | grep "^#") ]]; then
+		echo $line
+	elif [[ $(echo $line | grep "^UUID") ]]; then
+		# 3 pass mount, swap then root then other.
+		echo $line | awk '{ if($2 == "/"){ $6 = "1"; } else if (($2 == "none")) {$6 = "0"} else {{$6 = "2"}}; print $0 }'
+	else 
+		echo ""
+	fi
+done < /mnt/etc/fstab.raw > /mnt/etc/fstab
+
+echo "Example fstab:"
+cat <<EOF
+# <file system> <dir> <type> <options> <dump> <pass>
+# /dev/mapper/vg1-archroot LABEL=archroot
+UUID=031a2b85-c701-4f2c-bf32-f86d222391ae       /               btrfs           rw,relatime,ssd,space_cache,subvolid=257,subvol=/@root,subvol=@root   0 1
+
+# /dev/mapper/vg1-archroot LABEL=archroot
+UUID=031a2b85-c701-4f2c-bf32-f86d222391ae       /home           btrfs           rw,relatime,ssd,space_cache,subvolid=258,subvol=/@home,subvol=@home   0 2
+
+# /dev/mapper/vg1-archroot LABEL=archroot
+UUID=031a2b85-c701-4f2c-bf32-f86d222391ae       /var/lib/docker btrfs           rw,relatime,ssd,space_cache,subvolid=259,subvol=/@docker,subvol=@docker       0 2
+
+# /dev/nvme0n1p1 LABEL=boot
+UUID=3906-F913          /boot           vfat            rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro     0 2
+
+# /dev/mapper/vg1-archswap LABEL=archswap
+UUID=ede007f9-f560-4044-82ca-acf0fbb6824e       none            swap            defaults    0 0
+EOF
+echo "Is this fstab correct?"
+cat /mnt/etc/fstab

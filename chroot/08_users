@@ -1,0 +1,46 @@
+#! /bin/bash
+
+read -p "What's your user name: " USERNAME;
+read -p "What's your full name: " FULLNAME;
+
+#### Users
+##
+##```sh
+##pacman -S zsh vim sudo
+##```
+##
+##Link vi to vim:
+##```sh
+##ln -s /usr/bin/vim /usr/local/bin/vi
+##ln -s /usr/bin/vim /usr/local/bin/view
+##```
+##
+##Invoke `visudo` and uncomment the following:
+##
+##```sh
+##%wheel ALL=(ALL) ALL
+##```
+##
+##Secure root first with `passwd`
+##
+##Add a user e.g.
+##```sh
+##useradd -m -g users -G wheel,input -c "Alexander Courtis" -s /bin/zsh alex
+##passwd alex
+##```
+
+yes | pacman -S zsh vim sudo emacs
+
+echo "Uncomment `%wheel ALL=(ALL) ALL`"
+visudo
+
+ALLUSERS=$(awk -F':' '{ print $1}' /etc/passwd)
+USERS=$(echo $ALLUSERS | grep -v root | grep -v $USERNAME)
+echo "Other users on the system: $USERS"
+
+useradd -m -g users -G wheel,input -c "$FULLNAME" -s /bin/zsh $USERNAME
+echo "Pick a password:"
+passwd $USERNAME
+
+
+
