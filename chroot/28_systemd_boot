@@ -1,3 +1,7 @@
+#! /bin/bash
+
+set -e
+
 ##### Alternative: systemd-boot
 ##
 ##Some terribad UEFI implementations such as Dell 5520 don't want to boot directly from UEFI; they only seem to support booting from an .efi file, hence we use systemd-boot.
@@ -16,7 +20,7 @@ bootctl --path=/boot install
 ##```
 ##
 
-cat /boot/loader/loader.conf <<EOF
+cat > /boot/loader/loader.conf <<EOF
 default arch
 timeout 1
 EOF
@@ -34,8 +38,9 @@ EOF
 
 LUKSUUID=$(blkid -s UUID -o value /dev/nvme0n1p2)
 
+touch /boot/loader/entries/arch.conf
 mkdir -p /boot/loader/entries/
-cat /boot/loader/entries/arch.conf <<EOF
+cat > /boot/loader/entries/arch.conf <<EOF
 title Arch Linux
 linux /vmlinuz-linux
 initrd /intel-ucode.img
