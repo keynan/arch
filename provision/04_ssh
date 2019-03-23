@@ -1,0 +1,11 @@
+#! /bin/bash
+
+set -e 
+
+#### Setup CLI User Environment
+##
+##Install your public/private keys under `~/.ssh`
+##
+##See [Usage](#usage)
+
+ssh-keygen -t rsa -b 4096

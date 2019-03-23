@@ -1,0 +1,27 @@
+#! /bin/bash
+
+set -e 
+
+##```sh
+##cd /tmp
+##git clone https://aur.archlinux.org/aura-bin.git
+##cd aura-bin
+##makepkg -sri
+##```
+
+cd /tmp
+git clone https://aur.archlinux.org/aura-bin.git
+cd aura-bin
+makepkg -sri
+
+aura -Ax \
+	gron-bin \
+	j4-dmenu-desktop \
+	qdirstat \
+	pulseaudio-ctl \
+	redshift-minimal \
+	ttf-ms-fonts \
+	xlayoutdisplay \
+	xf86-input-libinput \
+	libinput-gestures \
+	xorg-xbacklight 

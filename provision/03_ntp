@@ -1,0 +1,12 @@
+#! /bin/bash
+
+set -e
+
+#### Enable NTP Sync
+##
+##`timedatectl set-ntp true`
+##
+##You can check this with: `timedatectl status`
+
+timedatectl set-ntp true
+timedatectl status

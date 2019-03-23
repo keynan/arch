@@ -1,0 +1,98 @@
+#! /bin/bash
+
+set -e 
+
+#### Install Packages
+##
+###### Official
+##
+##`pacman -S ...`
+##
+##alacritty
+##autofs
+##calc
+##chromium
+##dex
+##dmenu
+##docker
+##dunst
+##efibootmgr
+##facter
+##gpm
+##jq
+##keychain
+##network-manager-applet
+##nfs-utils
+##noto-fonts
+##noto-fonts-emoji
+##noto-fonts-extra
+##pasystray
+##pavucontrol
+##pwgen
+##rsync
+##scrot
+##slock
+##sysstat
+##the_silver_searcher
+##tmux
+##ttf-dejavu
+##ttf-hack
+##udisks2
+##unzip
+##xautolock
+##xdg-utils
+##xmlstarlet
+##xorg-fonts-100dpi
+##xorg-fonts-75dpi
+##xorg-fonts-misc
+##xorg-server
+##xorg-xinit
+##xorg-xrandr
+##xterm
+##zsh-completions
+##
+##`gtk2` is not required for Jetbrains products, however as at 2019/03 it allows it to draw using the actual DPI of the monitor.
+
+yes | pacman -S \
+	alacritty \
+	autofs \
+	calc \
+	chromium \
+	dex \
+	dmenu \
+	docker \
+	dunst \
+	efibootmgr \
+	facter \
+	gpm \
+	jq \
+	keychain \
+	network-manager-applet \
+	nfs-utils \
+	noto-fonts \
+	noto-fonts-emoji \
+	noto-fonts-extra \
+	pasystray \
+	pavucontrol \
+	pwgen \
+	rsync \
+	scrot \
+	slock \
+	sysstat \
+	the_silver_searcher \
+	tmux \
+	ttf-dejavu \
+	ttf-hack \
+	udisks2 \
+	unzip \
+	xautolock \
+	xdg-utils \
+	xmlstarlet \
+	xorg-fonts-100dpi \
+	xorg-fonts-75dpi \
+	xorg-fonts-misc \
+	xorg-server \
+	xorg-xinit \
+	xorg-xrandr \
+	xterm \
+	zsh-completions 

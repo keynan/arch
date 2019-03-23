@@ -1,0 +1,22 @@
+#! /bin/bash
+
+set -e
+
+#### Set Hostname
+##
+##Use `nmtui` to setup the system network connection.
+##
+##Apply the hostname e.g.:
+##
+##`hostnamectl set-hostname gigantor`
+##
+##Add the hostname to `/etc/hosts` first, as IPv4 local:
+##
+##`127.0.0.1	gigantor`
+
+HOSTNAME=npxcomplete
+hostnamectl set-hostname $HOSTNAME
+
+cat >> /etc/hosts <<EOF
+127.0.0.1	$HOSTNAME
+EOF
