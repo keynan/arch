@@ -68,3 +68,4 @@ else
 	exit 1;
 fi
 
+# cryptsetup open /dev/nvme0n1p2 cryptlvm ; sleep 1 ; swapon /dev/vg1/archswap ; mount /dev/vg1/archroot /mnt -o subvol=/@root ; mount /dev/nvme0n1p1 /mnt/boot
