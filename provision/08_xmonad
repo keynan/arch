@@ -55,7 +55,7 @@ if [[ ! -e $HOME/.xmonad/stack.yaml.bak ]]; then
 fi
 cat $HOME/.xmonad/stack.yaml.bak | grep -v ^# > $HOME/.xmonad/stack.yaml
 cat >> $HOME/.xmonad/stack.yaml <<EOF
-extra_deps:
+extra-deps:
   - iwlib-0.1.0
 flags:
   xmobar:

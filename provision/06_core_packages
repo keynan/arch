@@ -96,4 +96,5 @@ yes | pacman -S \
 	xorg-xrandr \
 	xterm \
 	zsh-completions \
+	wireless_tools \
 	xorg-xbacklight 
