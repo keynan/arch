@@ -50,3 +50,31 @@ curl https://raw.githubusercontent.com/keynan/arch/8b7f316264ad541f8c8a31ccf3165
 curl https://raw.githubusercontent.com/keynan/arch/8b7f316264ad541f8c8a31ccf31650f908ca836d/home/.xmobarrc > $HOME/.xmobarrc
 curl https://raw.githubusercontent.com/keynan/arch/8b7f316264ad541f8c8a31ccf31650f908ca836d/home/.xinitrc > $HOME/.xinitrc
 
+if [[ ! -e $HOME/.xmonad/stack.yml.bak ]]; then
+	cp $HOME/.xmonad/stack.yml $HOME/.xmonad/stack.yml.bak
+fi
+cat $HOME/.xmonad/stack.yml.bak | grep -v ^# > $HOME/.xmonad/stack.yml
+cat > $HOME/.xmonad/stack.yml <<EOF
+extra_deps:
+  - iwlib-0.1.0
+flags:
+  xmobar:
+    all_extensions: true
+extra-package-dbs: []
+EOF
+
+stack install
+
+cat > $HOME/.xmonad/build <<EOF
+exec stack ghc -- \
+  --make xmonad.hs \
+  -i \
+  -ilib \
+  -fforce-recomp \
+  -main-is main \
+  -v0 \
+  -o "$1"
+EOF
+chmod a+x $HOME/.xmonad/build
+
+xmonad --recompile
