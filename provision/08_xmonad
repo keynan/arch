@@ -50,11 +50,11 @@ curl https://raw.githubusercontent.com/keynan/arch/8b7f316264ad541f8c8a31ccf3165
 curl https://raw.githubusercontent.com/keynan/arch/8b7f316264ad541f8c8a31ccf31650f908ca836d/home/.xmobarrc > $HOME/.xmobarrc
 curl https://raw.githubusercontent.com/keynan/arch/8b7f316264ad541f8c8a31ccf31650f908ca836d/home/.xinitrc > $HOME/.xinitrc
 
-if [[ ! -e $HOME/.xmonad/stack.yml.bak ]]; then
-	cp $HOME/.xmonad/stack.yml $HOME/.xmonad/stack.yml.bak
+if [[ ! -e $HOME/.xmonad/stack.yaml.bak ]]; then
+	cp $HOME/.xmonad/stack.yaml $HOME/.xmonad/stack.yaml.bak
 fi
-cat $HOME/.xmonad/stack.yml.bak | grep -v ^# > $HOME/.xmonad/stack.yml
-cat > $HOME/.xmonad/stack.yml <<EOF
+cat $HOME/.xmonad/stack.yaml.bak | grep -v ^# > $HOME/.xmonad/stack.yaml
+cat > $HOME/.xmonad/stack.yaml <<EOF
 extra_deps:
   - iwlib-0.1.0
 flags:
