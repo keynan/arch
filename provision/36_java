@@ -1,0 +1,8 @@
+#! /bin/bash
+
+set -e
+
+pacman -S \
+  jdk8-openjdk \
+  jdk-adoptopenjdk 
+  
