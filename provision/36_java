@@ -7,4 +7,9 @@ pacman -S \
 
 aura -A \
   jdk-adoptopenjdk 
-  
+
+installmvnvm () {
+	mkdir -p ~/bin && curl -s https://bitbucket.org/mjensen/mvnvm/raw/master/mvn > ~/bin/mvn && chmod 0755 ~/bin/mvn
+}
+
+sudo -u "$SUDO_USER" installmvnvm

@@ -1,0 +1,16 @@
+git clone ssh://git@bitbucket-mirror-au.internal.atlassian.com:7999/stash/jiracloud/jira.git $HOME/src/jira/master
+cd $HOME/src/jira/master
+
+## fix your push target so you're not pushing to the proxy
+git remote set-url --push origin ssh://git@stash.atlassian.com:7997/JIRACLOUD/jira.git
+
+## use these dirs for active development, never look at ~/src/jira/master again
+git worktree add ../alpha
+git worktree add ../beta
+git worktree add ../gamma
+git worktree add ../omega
+ 
+./jmake precommit --install
+
+echo "./jmake healthcheck"
+./jmake healthcheck
