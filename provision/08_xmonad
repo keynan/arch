@@ -14,7 +14,7 @@ mkdir -p $HOME/.xmonad
 cd $HOME/.xmonad
 
 if [[ ! -e $HOME/.xmonad/xmonad-git/.git ]]; then
-	git clone "https://github.com/xmonad/xmonad" xmonad-git
+	git clone "https://github.com/xmonad/xmonad" $HOME/.xmonad/xmonad-git
 else
 	pushd .
 	cd $HOME/.xmonad/xmonad-git
@@ -22,8 +22,8 @@ else
 	popd
 fi
 
-if [[ ! -e $HOME/.xmonad/xmonad-git/.git ]]; then
-	git clone "https://github.com/xmonad/xmonad-contrib" xmonad-contrib-git
+if [[ ! -e $HOME/.xmonad/xmonad-contrib-git/.git ]]; then
+	git clone "https://github.com/xmonad/xmonad-contrib" $HOME/.xmonad/xmonad-contrib-git
 else
 	pushd .
 	cd $HOME/.xmonad/xmonad-contrib-git
@@ -31,8 +31,8 @@ else
 	popd
 fi
 
-if [[ ! -e $HOME/.xmonad/xmonad-git/.git ]]; then
-	git clone "https://github.com/jaor/xmobar" xmobar-git
+if [[ ! -e $HOME/.xmonad/xmobar-git/.git ]]; then
+	git clone "https://github.com/jaor/xmobar" $HOME/.xmonad/xmobar-git
 else
 	pushd .
 	cd $HOME/.xmonad/xmobar-git
