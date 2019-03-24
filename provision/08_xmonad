@@ -39,7 +39,7 @@ else
 	popd
 fi
 
-if [[ ! -e $HOME/.xmonad/stack.yml ]]; then
+if [[ ! -e $HOME/.xmonad/stack.yaml ]]; then
 	mkdir -p $HOME/.xmonad
 	cd $HOME/.xmonad
 	stack init
