@@ -9,10 +9,14 @@ set -e
 ##makepkg -sri
 ##```
 
-cd /tmp
-git clone https://aur.archlinux.org/aura-bin.git
-cd aura-bin
-makepkg -sri
+mkaura () {
+	mkdir $HOME/tmp
+	cd $HOME/tmp
+	git clone https://aur.archlinux.org/aura-bin.git
+	cd aura-bin
+	makepkg -sri
+}
+sudo -u "$SUDO_USER" mkaura
 
 aura -Ax \
 	gron-bin \
@@ -23,5 +27,5 @@ aura -Ax \
 	ttf-ms-fonts \
 	xlayoutdisplay \
 	xf86-input-libinput \
-	libinput-gestures \
-	xorg-xbacklight 
+	libinput-gestures 
+	

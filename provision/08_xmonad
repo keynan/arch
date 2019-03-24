@@ -2,13 +2,47 @@
 
 set -e 
 
+if [[ $EUID -eq 0 ]]; then
+	echo "Don't run this script as root"
+	exit 1
+fi
+
 curl -sSL https://get.haskellstack.org/ | sh
 stack setup
 
-mkdir -P ~/.xmonad
-cd ~/.xmonad
+mkdir -p $HOME/.xmonad
+cd $HOME/.xmonad
 
-git clone "https://github.com/xmonad/xmonad" xmonad-git
-git clone "https://github.com/xmonad/xmonad-contrib" xmonad-contrib-git
-git clone "https://github.com/jaor/xmobar" xmobar-git
+if [[ ! -e $HOME/.xmonad/xmonad-git/.git ]]; then
+	git clone "https://github.com/xmonad/xmonad" xmonad-git
+else
+	pushd .
+	cd $HOME/.xmonad/xmonad-git
+	git pull
+	popd
+fi
+
+if [[ ! -e $HOME/.xmonad/xmonad-git/.git ]]; then
+	git clone "https://github.com/xmonad/xmonad-contrib" xmonad-contrib-git
+else
+	pushd .
+	cd $HOME/.xmonad/xmonad-contrib-git
+	git pull
+	popd
+fi
+
+if [[ ! -e $HOME/.xmonad/xmonad-git/.git ]]; then
+	git clone "https://github.com/jaor/xmobar" xmobar-git
+else
+	pushd .
+	cd $HOME/.xmonad/xmobar-git
+	git pull
+	popd
+fi
+
 stack init
+
+curl https://raw.githubusercontent.com/keynan/arch/8b7f316264ad541f8c8a31ccf31650f908ca836d/home/.xmonad/xmonad.hs > $HOME/.xmonad/xmonad.hs
+curl https://raw.githubusercontent.com/keynan/arch/8b7f316264ad541f8c8a31ccf31650f908ca836d/home/.xmobarrc > $HOME/.xmobarrc
+curl https://raw.githubusercontent.com/keynan/arch/8b7f316264ad541f8c8a31ccf31650f908ca836d/home/.xinitrc > $HOME/.xinitrc
+
