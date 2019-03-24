@@ -40,7 +40,9 @@ else
 	popd
 fi
 
-stack init
+if [[ ! -e $HOME/.xmonad/stack.yml ]]; then
+	stack init
+fi
 
 curl https://raw.githubusercontent.com/keynan/arch/8b7f316264ad541f8c8a31ccf31650f908ca836d/home/.xmonad/xmonad.hs > $HOME/.xmonad/xmonad.hs
 curl https://raw.githubusercontent.com/keynan/arch/8b7f316264ad541f8c8a31ccf31650f908ca836d/home/.xmobarrc > $HOME/.xmobarrc
