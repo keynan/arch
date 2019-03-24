@@ -7,11 +7,10 @@ if [[ $EUID -eq 0 ]]; then
 	exit 1
 fi
 
-curl -sSL https://get.haskellstack.org/ | sh
-stack setup
-
-mkdir -p $HOME/.xmonad
-cd $HOME/.xmonad
+if [[ ! $(stack --version) ]]; then 
+	curl -sSL https://get.haskellstack.org/ | sh
+	stack setup
+fi
 
 if [[ ! -e $HOME/.xmonad/xmonad-git/.git ]]; then
 	git clone "https://github.com/xmonad/xmonad" $HOME/.xmonad/xmonad-git
@@ -41,7 +40,10 @@ else
 fi
 
 if [[ ! -e $HOME/.xmonad/stack.yml ]]; then
+	mkdir -p $HOME/.xmonad
+	cd $HOME/.xmonad
 	stack init
+	cd -
 fi
 
 curl https://raw.githubusercontent.com/keynan/arch/8b7f316264ad541f8c8a31ccf31650f908ca836d/home/.xmonad/xmonad.hs > $HOME/.xmonad/xmonad.hs
