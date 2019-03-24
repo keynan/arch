@@ -63,7 +63,9 @@ flags:
 extra-package-dbs: []
 EOF
 
+cd $HOME/.xmonad
 stack install
+cd -
 
 cat > $HOME/.xmonad/build <<EOF
 exec stack ghc -- \
