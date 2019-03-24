@@ -3,6 +3,8 @@
 set -e
 
 pacman -S \
-  jdk8-openjdk \
+  jdk8-openjdk 
+
+aura -A \
   jdk-adoptopenjdk 
   

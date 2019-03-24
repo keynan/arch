@@ -16,7 +16,10 @@ mkaura () {
 	cd aura-bin
 	makepkg -sri
 }
-sudo -u "$SUDO_USER" mkaura
+
+if [[ ! $(whereis aura) ]]; then
+	sudo -u "$SUDO_USER" mkaura
+fi
 
 aura -Ax \
 	gron-bin \
@@ -27,5 +30,6 @@ aura -Ax \
 	ttf-ms-fonts \
 	xlayoutdisplay \
 	xf86-input-libinput \
-	libinput-gestures 
+	libinput-gestures \
+	google-chrome
 	

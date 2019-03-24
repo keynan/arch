@@ -97,4 +97,7 @@ yes | pacman -S \
 	xterm \
 	zsh-completions \
 	wireless_tools \
-	xorg-xbacklight 
+	xorg-xbacklight \
+	terminator \
+	openconnect \
+	networkmanager-openconnect
