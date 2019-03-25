@@ -1,28 +1,14 @@
-# .zshenv is invoked when a login shell is started; zsh on arch will source /etc/profile and thus the scripts in /etc/profile.d for each login shell, some of which will append to the path
-typeset -U path
-[[ -d ~/bin ]] && path=(~/bin "$path[@]")
+export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
+export GOPATH=$HOME/go
+export GOBIN=$GOPATH/bin
+export RUSTHOME=$HOME/.cargo
 
-# vi everywhere, symlinked to vim
-export EDITOR="vi"
-export VISUAL="vi"
-
-# better paging
-export PAGER="less"
-
-# case insensitive searching and colours
-export LESS="iR"
-
-# keep this synced with 90-keyboard.conf, until X goes away
-export XKB_DEFAULT_OPTIONS="ctrl:nocaps"
-
-# tell old java apps that we're using a non-reparenting window manager
-export _JAVA_AWT_WM_NONREPARENTING=1
-
-# some java build systems seem to like having JAVA_HOME set
-if [ -L /usr/lib/jvm/default ]; then
-	export JAVA_HOME=/usr/lib/jvm/default
+if [[ $PATH_AT_LOGIN == "" ]]; then
+    export PATH_AT_LOGIN=$PATH
 fi
 
-# allow use of "dev version" libraries under /usr/local/lib
-export LD_LIBRARY_PATH="/usr/local/lib"
-export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig"
+export PATH=$PATH_AT_LOGIN:$HOME/bin:$HOME/.local/bin:$GOBIN:$RUSTHOME/bin
+export NIX_PATH=
+export GO111MODULE=on
+

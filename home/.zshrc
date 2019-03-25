@@ -1,118 +1,74 @@
-# zsh on arch will source /etc/profile and thus the scripts in /etc/profile.d for each login shell, some of which will append duplicates, hence we need to invoke this typeset to remove any dupes
-typeset -U path
-
-# ensure that these are at the very end of the path, to prevent clobbering of system utils e.g. xpath, nvm
-[[ -d ~/src/robbieg.bin ]] && path=("$path[@]" ~/src/robbieg.bin)
-[[ -d ~/src/atlassian-scripts ]] && path=("$path[@]" ~/src/atlassian-scripts/bin)
-
-# shell agnostic function returns true if ${1} is a valid executable, function etc.
-function haz() {
-	return $(type "${1}" > /dev/null 2>&1)
-}
-
-# moar history
+# Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=1000
+SAVEHIST=1000
+setopt appendhistory
+unsetopt autocd beep notify
+setopt noautomenu
+setopt nomenucomplete
 
-# vim CLI mode
-bindkey -v
+bindkey -e
+bindkey ";5D" backward-word
+bindkey ";5C" forward-word
+bindkey "\e[3~" delete-char
+# End of lines configured by zsh-newuser-install
 
-# boot the zsh completion system 
+# The following lines were added by compinstall
+zstyle :compinstall filename '/home/kpratt/.zshrc'
+
 autoload -Uz compinit
 compinit
+# End of lines added by compinstall
 
-# bindings for insert mode
-bindkey "^J" history-beginning-search-forward
-bindkey "^K" history-beginning-search-backward
+# <PROMPT>
+autoload -U colors && colors
+PS1="%{$fg[red]%}%n%{$reset_color%}@%{$fg[blue]%}%m %{$fg[yellow]%}%~ %{$reset_color%}
+$ "
+export PROMPT_COMMAND=__prompt_command  # Func to gen PS1 after CMDs
 
-# common aliases
-alias ls="ls --color=always"
-alias ll="ls -lh"
-alias lla="ll -a"
-alias grep="grep --color=always"
-alias diff="diff --color=always"
-alias rgrep="find . -type f -print0 | xargs -0 grep --color=always"
+function __prompt_command() {
+    # This needs to be first
+    local EXIT="$?"
 
-# select host prompt colour from: black, red, green, yellow, blue, magenta, cyan, white
-export PROMPT_COLOUR
-case "$(hostname)" in
-emperor*)
-	PROMPT_COLOUR="green"
-	;;
-tinygod*)
-	PROMPT_COLOUR="blue"
-	;;
-lord*)
-	PROMPT_COLOUR="magenta"
-	;;
-* )
-	PROMPT_COLOUR="yellow"
-	;;
-esac
+    #path is in a git repo (almost always)
+    local IMPORTANT_PATH=$(pwd)
+    local GITBRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null):$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null)
 
-# root prompt is always red
-if [ "${USER}" = "root" ]; then
-	PROMPT_COLOUR="red"
-fi
+    #path is relative to HOME?
+    if [[ IMPORTANT_PATH/ = "$HOME"/* ]]; then IMPORTANT_PATH=\~${$IMPORTANT_PATH#$HOME}; fi
 
-# prompt:
-#   bg red background nonzero return code and newline
-#   bg host background coloured ":; " in black text
-PS1="%(?..%F{black}%K{red}%?%k%f"$'\n'")%F{black}%K{${PROMPT_COLOUR}}:;%k%f "
-PS2="%K{${PROMPT_COLOUR}}:; %_%k "
+    # context
+    local PS1L=$IMPORTANT_PATH;
+    local PS1C=$GITBRANCH;
+    local PS1R=`date`;
 
-# title pwd and __git_ps1 (if present)
-#   "\e]0;" ESC xterm (title) code
-#   "\a"	BEL
-[[ -f /usr/share/git/completion/git-prompt.sh ]] && . /usr/share/git/completion/git-prompt.sh
-if haz __git_ps1; then
+    # calc offsets
+    local SPACE="$(($COLUMNS-${#PS1C}-${#PS1L}-${#PS1R}))"
+    local CENTER_OFFSET="$(($SPACE / 2))"
+    local RIGHT_OFFSET="$(($SPACE / 2))"
 
-	# show extra flags
-	export GIT_PS1_SHOWDIRTYSTATE=true
-	export GIT_PS1_SHOWSTASHSTATE=true
-	precmd() {
-		printf "\e]0;%s%s\a" "${PWD}" "$(__git_ps1)"
-	}
-else
-	precmd() {
-		printf "\e]0;%s\a" "${PWD}"
-	}
-fi
+    local CMD_OUTCOME_COLOR=green
+    if [[ ! $EXIT -eq 0  ]]; then
+	CMD_OUTCOME_COLOR=red
+    fi
+    #Red, Blue, Green, Cyan, Yellow, Magenta, Black & White
+    PS1="
+%{$fg[red]%}$PS1L%{$reset_color%}`whitespace $CENTER_OFFSET`%{$fg[blue]%}$PS1C%{$reset_color%}`whitespace $RIGHT_OFFSET`%{$fg[yellow]%}$PS1R%{$reset_color%}
+%{$fg[$CMD_OUTCOME_COLOR]%}$%{$reset_color%}"
+}
 
-# user mount helpers
-if haz udisksctl; then
-	mnt() {
-		if [ ${#} -ne 1 ]; then
-			echo "Usage: ${FUNCNAME} <block device>" >&2
-			return 1
-		fi
-		udisksctl mount -b ${1} && cd "$(findmnt -n -o TARGET ${1})"
-	}
-	umnt() {
-		if [ ${#} -ne 1 ]; then
-			echo "Usage: ${FUNCNAME} <block device>" >&2
-			return 1
-		fi
-		udisksctl unmount -b ${1}
-	}
-fi
+# </PROMPT>
 
-# music management utilities
-if [ -d /net/lord/music ]; then
-	alias music-home-to-lord="rsync -a -v --omit-dir-times --delete-after \${HOME}/music/ /net/lord/music/"
-	alias music-lord-to-home="rsync -a -v --omit-dir-times --delete-after /net/lord/music/ ${HOME}/music/"
-	if haz adb-sync; then
-		alias music-lord-to-android="adb-sync --delete /net/lord/music/ /sdcard/music"
-	fi
-fi
+function precmd() {
+     __prompt_command
+}
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+if [ -e /home/kpratt/.nix-profile/etc/profile.d/nix.sh ]; then . /home/kpratt/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
-# use the keychain wrapper to start ssh-agent if needed
-if haz keychain && [ -f ~/.ssh/id_rsa ]; then
-	eval $(keychain --eval --quiet --agents ssh ~/.ssh/id_rsa)
-fi
+alias grep="grep --color"
+alias ls="ls --color"
 
-# execute tmux if it isn't running; it will replace this process with a new login shell
-if haz tmux && [ -z "${TMUX}" ] && [ -f "${HOME}/.tmux.conf" ] && [ -z "${VSCODE_CLI}" ]; then
-	exec tmux
-fi
+[ -z "$NVM_DIR" ] && export NVM_DIR="$HOME/.nvm"
+source /usr/share/nvm/nvm.sh
+source /usr/share/nvm/bash_completion
+source /usr/share/nvm/install-nvm-exec

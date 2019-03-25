@@ -1,16 +1,24 @@
-[alias]
-	co = checkout
-	gup = smart-pull
-	gm = smart-merge
-	gl = smart-log
 [user]
-	name = Alexander Courtis
-	email = alex@courtis.org
-[core]
-	excludesfile = ~/.gitignore
+	name = kpratt
+	email = keynan.pratt@gmail.com
 [push]
-	default = current
+	default = upstream
 [color]
-	ui = always
-[merge]
-	renameLimit = 9999
+	ui = auto
+[alias]
+	lod = log --oneline --decorate
+	search = grep -n
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	gup = smart-pull
+    	gm = smart-merge
+    	gl = smart-log
+[core]
+	excludesfile = /Users/kpratt/.gitignore_global
+	editor = emacs
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
