@@ -32,7 +32,7 @@ function __prompt_command() {
 
     #path is in a git repo (almost always)
     local IMPORTANT_PATH=$(pwd)
-    local GITBRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null):$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null)
+    local GITBRANCH=$(git config user.email)     $(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null || git rev-parse --abbrev-ref HEAD 2>/dev/null)
 
     #path is relative to HOME?
     if [[ IMPORTANT_PATH/ = "$HOME"/* ]]; then IMPORTANT_PATH=\~${$IMPORTANT_PATH#$HOME}; fi
