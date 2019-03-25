@@ -100,4 +100,7 @@ yes | pacman -S \
 	tree \
 	xorg-xbacklight \
 	perl-xml-xpath \
-	nautilus
+	nautilus \
+	terminator \
+	openconnect \
+	networkmanager-openconnect
