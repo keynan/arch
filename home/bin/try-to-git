@@ -1,0 +1,14 @@
+#! /bin/bash
+
+set -e
+
+REMOTE=$1
+DIR=$2
+
+if [[ ! -e $DIR/.git ]]; then
+   git clone $REMOTE $DIR
+else
+   cd $DIR
+   git fetch
+   cd -
+fi

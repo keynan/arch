@@ -1,0 +1,14 @@
+#! /bin/bash
+
+set -e
+
+yes | pacman -S docker docker-compose
+
+if [[ ! $(cut -d: -f1 /etc/group | grep docker) ]]; then
+    groupadd docker
+fi
+usermod -aG docker $SUDO_USER
+
+systemctl enable docker
+systemctl start docker
+

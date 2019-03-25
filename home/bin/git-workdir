@@ -1,0 +1,11 @@
+#! /bin/bash
+
+dir=`pwd`
+while [[ ! -e $dir/.git ]] ;
+do
+	if [[ dir == "/" ]] ; then
+	   exit 1;
+	fi
+	dir=$(dirname $dir)
+done
+echo $dir

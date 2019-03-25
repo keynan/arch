@@ -75,7 +75,7 @@ exec stack ghc -- \
   -fforce-recomp \
   -main-is main \
   -v0 \
-  -o "$1"
+  -o "\$1"
 EOF
 chmod a+x $HOME/.xmonad/build
 

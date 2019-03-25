@@ -1,0 +1,17 @@
+#! /usr/bin/bash
+
+for gitdir in `find ./ | grep "/\\.git$" | sort`
+do
+    pushd . >& /dev/null
+    dir=$(dirname $gitdir)
+    echo ""
+    echo "=================== $dir ==================="
+    cd $dir
+
+    if [[ $1 == "eval" ]]; then 
+	eval "${@:2}"
+    else 
+	git "$@"
+    fi
+    popd >& /dev/null
+done

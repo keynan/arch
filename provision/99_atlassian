@@ -1,0 +1,53 @@
+#! /bin/bash
+
+set -e
+
+export PATH=$PATH:$HOME/arch/home/bin
+
+if [[ ! -e $HOME/bin/mvn ]]; then
+   mkdir -p $HOME/bin
+   curl -s https://bitbucket.org/mjensen/mvnvm/raw/master/mvn > $HOME/bin/mvn
+   chmod 0755 $HOME/bin/mvn
+fi
+
+try-to-git git@bitbucket.org:atlassian/maven-settings.git $HOME/maven-settings
+if [[ ! -e $HOME/.m2/settings-security.xml ]]; then
+    cd $HOME/maven-settings && ./maven-settings.sh
+fi
+
+if [[ ! -e $HOME/src/jira/master/.git ]]; then
+    git clone ssh://git@bitbucket-mirror-au.internal.atlassian.com:7999/stash/jiracloud/jira.git $HOME/src/jira/master
+    cd $HOME/src/jira/master
+ 
+    ## use these dirs for active development, never look at ~/src/jira/master again
+    git worktree add ../alpha
+    git worktree add ../beta
+    git worktree add ../gamma
+ 
+    ## fix your push target so you're not pushing to the proxy
+    git remote set-url --push origin ssh://git@stash.atlassian.com:7997/JIRACLOUD/jira.git
+else
+    try-to-git ssh://git@bitbucket-mirror-au.internal.atlassian.com:7999/stash/jiracloud/jira.git $HOME/src/jira/master
+fi
+
+cd $HOME/src/jira/master
+./jmake precommit --install
+
+try-to-git git@bitbucket.org:atlassian/jira-dw-workflow.git              $HOME/src/jira/dw > /dev/null &
+try-to-git git@bitbucket.org:atlassian/swift-contract-broker.git         $HOME/src/contract-broker > /dev/null &
+try-to-git git@bitbucket.org:atlassian/launcher-bot.git                  $HOME/src/launcher-bot > /dev/null &
+try-to-git git@bitbucket.org:atlassian/go-stack.git                      $HOME/src/go/go-stack > /dev/null &
+try-to-git git@bitbucket.org:atlassian/go-stack-template.git             $HOME/go/go-stack-template > /dev/null &
+try-to-git git@bitbucket.org:atlassian/atlassian-connect-spring-boot.git $HOME/src/micros/atlassian-connect-spring-boot > /dev/null &
+try-to-git ssh://git@stash.atlassian.com:7997/jiracloud/jira-frontend.git $HOME/src/jira/front > /dev/null &
+try-to-git https://github.com/zsh-users/zsh-autosuggestions $HOME/.zsh/zsh-autosuggestions
+
+if [[ ! -e $HOME/bin/micros ]]; then
+    curl -O -X GET https://statlas.prod.atl-paas.net/micros-stable/linux/micros.tar.gz
+    tar xvf micros.tar.gz
+    mkdir -p ${HOME}/bin
+    chmod +x micros
+    mv micros ${HOME}/bin
+    rm -f micros.tar.gz
+fi
+

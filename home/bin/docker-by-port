@@ -1,0 +1,16 @@
+#! /bin/bash
+PORT=$1
+
+IFS='
+';
+POS=0
+for line in $(docker ps);
+do
+    REGEX="0\\.0\\.0\\.0:$PORT\\->"
+    if [[ $line =~ $REGEX ]]; then
+#	echo ${line:0:12}
+	echo $line | awk '{ print $1 }'
+    fi
+done
+
+

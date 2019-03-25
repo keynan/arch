@@ -1,0 +1,35 @@
+#! /usr/bin/bash
+
+if [[ $1 = "-c" ]]; then
+    rm target/*
+    exit 0
+
+else
+    if [[ $1 ]]; then
+	TEX_FILE=$1
+    else
+	TEX_FILE="root.tex"
+    fi
+    AUX_FILE=${TEX_FILE/"tex"/"aux"}
+    PDF_FILE=${TEX_FILE/"tex"/"pdf"}
+
+    mkdir -p target
+    pdflatex -output-directory target -interaction=nonstopmode $TEX_FILE >& /dev/null
+    if [ $? ]; then
+	if [[ -e target/$AUX_FILE ]]; then
+	    bibtex target/$AUX_FILE
+	    pdflatex -output-directory target -interaction=nonstopmode $TEX_FILE >& /dev/null
+	    pdflatex -output-directory target -interaction=nonstopmode $TEX_FILE 
+	fi
+	if [[ -e "target/$PDF_FILE" ]]; then
+	    mv "target/$PDF_FILE" "./"
+	else
+	    cat target/root.log
+	fi
+	exit 0
+    else
+	cat target/root.log
+	exit 1
+    fi
+
+fi

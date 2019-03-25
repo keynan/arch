@@ -1,0 +1,12 @@
+#!/usr/bin/bash
+
+find | while read i ; do
+    echo ""
+    echo $i
+    echo ""
+    gnuName=`echo $i | sed -e 's/ /_/g' | sed -e 's/【/_/g' | sed -e 's/】/_/g'`
+    if [[ $gnuName != $i ]]; then
+        mv "$i" "$gnuName"
+    fi
+
+done

@@ -1,0 +1,37 @@
+#!/usr/bin/bash
+set -e
+
+###
+### Process Flags
+###
+while [[ $# -gt 0 ]]
+do
+    key="$1"
+
+    case $key in
+	-o)
+	    STDOUT=1
+	    ;;
+	##
+	## put aside postional args
+	##
+	*)
+	    POSITIONAL+=("$1") # save it in an array for later
+	    ;;
+    esac
+    shift
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
+UPSTREAM='origin/master'
+
+
+
+echo
+git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null
+echo
+git diff $UPSTREAM --name-only --cached .
+
+
+
+

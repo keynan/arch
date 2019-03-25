@@ -1,0 +1,11 @@
+
+if [[ $# -ne 2 ]]; then
+   exit 0
+fi
+
+BRANCH=$1
+FILE=$2
+ROOT=`git rev-parse --show-toplevel`
+
+mkdir -p $(dirname "${FILE}")
+git show $BRANCH:$FILE > $ROOT/$FILE

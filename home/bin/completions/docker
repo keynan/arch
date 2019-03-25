@@ -1,0 +1,24 @@
+#! /bin/bash
+
+_my_docker ()   #  By convention, the function name
+{                 #+ starts with an underscore.
+  local cur
+  # Pointer to current completion word.
+  # By convention, it's named "cur" but this isn't strictly necessary.
+
+  COMPREPLY=()   # Array variable storing the possible completions.
+  cur=${COMP_WORDS[COMP_CWORD]}
+
+  if [[ "${COMP_WORDS[1]}" == "kill" ]]; then
+      local procs=$(docker ps | tail -n -1 | awk '{ print $1 }')
+      if [[ ${#COMP_WORDS[@]} -gt 3 ]]; then
+	  return
+      fi
+      COMPREPLY=( $( compgen -W '$procs') )
+  else
+      echo $cur
+  fi
+  return 0
+}
+
+complete -F _my_docker -o filenames docker

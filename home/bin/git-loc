@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+git ls-files | grep "\.$1\$" | xargs -Iarg cat arg | wc -l

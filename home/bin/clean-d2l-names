@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+
+find -maxdepth 1 | while read i ; do 
+	gnuName=`echo $i | sed -e 's/.*_-_\(.*\)_-_.*/\1/g'`
+  mv $i "$(dirname $i)/$gnuName"
+done
+

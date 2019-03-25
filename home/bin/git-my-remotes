@@ -1,0 +1,11 @@
+#! /bin/bash
+
+for branch in `git branch -r | grep -v HEAD`;
+do
+	devNull=`git show --format="%an" $branch | head -n 1 | grep kpratt`
+	MINE=$?
+	if [[ MINE -eq 0 ]]; then
+	   echo $branch
+	fi
+done
+

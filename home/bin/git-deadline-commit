@@ -1,0 +1,5 @@
+#! /usr/bin/bash
+
+git log --format=%H --until="\"$@\"" -1
+
+

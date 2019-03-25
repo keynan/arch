@@ -27,5 +27,8 @@ aura -Ax \
 	ttf-ms-fonts \
 	xlayoutdisplay \
 	xf86-input-libinput \
-	libinput-gestures 
+	intellij-idea-ultimate-edition \
+	networkmanager-dmenu-git \
+	libinput-gestures \
+	slack-desktop
 	

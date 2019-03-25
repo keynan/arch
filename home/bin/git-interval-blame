@@ -1,0 +1,17 @@
+#! /bin/bash
+
+FILE=$1
+if [[ $3 ]]; then
+   BEFORE="--before $3"
+else
+   BEFORE=""
+fi	
+AFTER=${2:-`date -d "1 day ago" '+%Y-%m-%d'`}
+
+git log \
+    --date=short \
+    --format='%H "%ad"' \
+    --after="$AFTER 00:00" \
+    $BEFORE \
+    --max-count=100 \
+    --follow -- $FILE

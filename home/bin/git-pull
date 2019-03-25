@@ -1,0 +1,2 @@
+unset SSH_ASKPASS
+git pull

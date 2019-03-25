@@ -1,0 +1,8 @@
+#! /bin/bash
+PID=`pgrep $1`
+kill $PID
+function homicide {
+sleep 5
+kill -9 $PID
+}
+homicide &

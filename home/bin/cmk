@@ -1,0 +1,19 @@
+#! /usr/bin/bash
+
+CMD=$1
+
+if [[ $CMD == "clean" ]]; then 
+  make clean
+  for dir in "CMakeFiles" "CMakeCache.txt" "Makefile" "cmake_install.cmake" "target"
+  do
+    if [[ -e $dir ]]; then
+      rm -rf $dir
+    fi
+  done
+else
+  mkdir -p target
+  cmake CMakeLists.txt
+  make
+fi
+
+

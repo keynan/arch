@@ -1,0 +1,20 @@
+#!/usr/bin/bash
+
+for student in $(find -maxdepth 2)
+do
+	extract_to=$(dirname $student)
+	if [[ `echo $student | grep \\.tar\\.gz$` ]]; then
+		tar -C $extract_to -xzf $student
+	elif [[ `echo $student | grep \\.tgz$` ]]; then
+		tar -C $extract_to -xzf $student
+	elif [[ `echo $student | grep \\.tar$` ]]; then
+		tar -C $extract_to -xf $student
+	elif [[ `echo $student | grep "\\.zip$"` ]]; then
+		unzip -d $extract_to $student
+	else 
+		echo $student
+	fi
+done
+
+
+
