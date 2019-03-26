@@ -150,14 +150,18 @@ myKeys conf = M.fromList $
     , ((myModMask ,                xK_r ),      runMenu)
     , ((controlMask .|. shiftMask, xK_n ),      spawn "networkmanager_dmenu")
     , ((myModMask ,                xK_c ),      kill)
+
     -- Empty Workspace Movement
     , ((altMask , xK_space ), viewEmptyWorkspace)
     , ((altMask .|. shiftMask , xK_space ), tagToEmptyWorkspace)
+
     -- Layout Commands
     , ((myModMask , xK_space ), sendMessage NextLayout)
+
     -- , ((altMask , xK_Return ), sendMessage FirstLayout)
     , ((myModMask , xK_n ), refresh)
     , ((myModMask , xK_m ), windows S.swapMaster)
+
     -- controlling window movement, position and location
     , ((myModMask                , xK_d )        , spawn "init-displays")
     , ((myModMask .|. shiftMask  , xK_d )        , spawn "displays-mounted")
@@ -171,6 +175,7 @@ myKeys conf = M.fromList $
     , ((myModMask                , xK_t )        , withFocused $ windows . S.sink)
     , ((myModMask                , xK_w )        , sendMessage (IncMasterN 1))
     , ((myModMask                , xK_v )        , sendMessage (IncMasterN (-1)))
+
     -- Shutdown commands
     , ((myModMask , xK_q ), restart "xmonad" True)
     , ((myModMask , xK_h ), spawn "kdesudo systemctl hibernate")
@@ -178,15 +183,21 @@ myKeys conf = M.fromList $
     , ((myModMask .|. shiftMask, xK_e ), io (exitWith ExitSuccess))
     , ((myModMask .|. shiftMask, xK_w ), spawn "gnome-screensaver-command -l")
     , ((myModMask , xK_l ), spawn "xautolock -locknow")
+
     -- Print Screen
     , ((myModMask , xK_Print ), spawn "gnome-screenshot")
     , ((myModMask .|. shiftMask, xK_Print ), spawn "gnome-screenshot -a")
-    -- MPC and Volume commands
-    , ((myModMask , xK_Page_Up), spawn "mpc next")
-    , ((myModMask , xK_Page_Down), spawn "mpc prev")
-    , ((myModMask , xK_k), spawn "pulseaudio-ctl mute")
-    , ((myModMask , xK_Home), spawn "amixer -c0 -- sset Master Playback 2dB+")
-    , ((myModMask , xK_End), spawn "amixer -c0 -- sset Master Playback 2dB-")
+
+    -- volume control
+    , ((noModMask,                xF86XK_AudioMute        ), spawn "xmobarPulseVolume mute")
+    , ((noModMask,                xF86XK_AudioLowerVolume ), spawn "xmobarPulseVolume down")
+    , ((noModMask,                xF86XK_AudioRaiseVolume ), spawn "xmobarPulseVolume up")
+    , ((noModMask,                xF86XK_AudioMicMute     ), spawn "xmobarPulseVolume mute-input")
+
+    -- brightness controls
+    , ((noModMask,                xF86XK_MonBrightnessDown), spawn "xbacklight -dec 10%")
+    , ((noModMask,                xF86XK_MonBrightnessUp  ), spawn "xbacklight -inc 10%")
+
     -- Screen Movement
     , ((altMask .|. controlMask, xK_Left ), prevScreen >> windowCenter)
     , ((altMask .|. controlMask, xK_Right ), nextScreen >> windowCenter)
