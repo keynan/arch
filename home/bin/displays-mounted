@@ -1,0 +1,20 @@
+#! /bin/bash
+
+xrandr \
+ --dpi 288 \
+ --output eDP1 \
+ 	  --mode 3840x2160 \
+	  --rate 60 \
+	  --pos 3840x0 \
+	  --fb 7680x2160 \
+	  --primary \
+ --output DP1 --off \
+ --output DP2 --off \
+ --output DP3 \
+ 	  --mode 1920x1080 \
+	  --scale 2x2 \
+	  --rate 60 \
+ --output VIRTUAL1 --off
+
+sleep 4
+
