@@ -177,7 +177,7 @@ myKeys conf = M.fromList $
     , ((myModMask .|. shiftMask, xK_q ), spawn "gksudo shutdown -P now")
     , ((myModMask .|. shiftMask, xK_e ), io (exitWith ExitSuccess))
     , ((myModMask .|. shiftMask, xK_w ), spawn "gnome-screensaver-command -l")
-    , ((myModMask , xK_l ), spawn "xlock")
+    , ((myModMask , xK_l ), spawn "xautolock -locknow")
     -- Print Screen
     , ((myModMask , xK_Print ), spawn "gnome-screenshot")
     , ((myModMask .|. shiftMask, xK_Print ), spawn "gnome-screenshot -a")

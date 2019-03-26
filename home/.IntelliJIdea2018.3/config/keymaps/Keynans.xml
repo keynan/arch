@@ -1,0 +1,14 @@
+<keymap version="1" name="Keynans" parent="Default for XWin">
+  <action id="ActivateTerminalToolWindow">
+    <keyboard-shortcut first-keystroke="alt f12" />
+    <keyboard-shortcut first-keystroke="ctrl t" />
+  </action>
+  <action id="Diff.PrevChange" />
+  <action id="Forward">
+    <keyboard-shortcut first-keystroke="ctrl alt right" />
+    <mouse-shortcut keystroke="button5" />
+    <keyboard-shortcut first-keystroke="alt left" />
+  </action>
+  <action id="PreviousTab" />
+  <action id="Vcs.UpdateProject" />
+</keymap>
