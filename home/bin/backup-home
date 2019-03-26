@@ -1,0 +1,19 @@
+#! /bin/bash
+
+set -e
+
+cd $HOME/arch
+
+while IFS='' read -r targetFile; do
+    sourceFile=${targetFile#$HOME/arch/home/}
+    sourceFile=$HOME/$sourceFile
+    if [[ -e $sourceFile ]]; then
+       echo "$sourceFile => $targetFile"
+       cp -f $sourceFile $targetFile
+       git add $targetFile
+    fi
+done < <(find $HOME/arch/home -type f)
+
+git status
+git commit -m"<automated backup of home dir>" || echo "<no commit>"
+git push origin `git rev-parse --abbrev-ref HEAD 2>/dev/null`:auto-backup
