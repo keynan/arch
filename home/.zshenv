@@ -11,4 +11,3 @@ fi
 export PATH=$PATH_AT_LOGIN:$HOME/bin:$HOME/.local/bin:$GOBIN:$RUSTHOME/bin
 export NIX_PATH=
 export GO111MODULE=on
-

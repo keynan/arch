@@ -44,6 +44,7 @@ import System.Exit
 
 import XMonad.Prompt
 import XMonad.Actions.TagWindows
+import Graphics.X11.ExtraTypes.XF86
 
 import XMonad.Actions.OnScreen (greedyViewOnScreen, viewOnScreen)
 import Data.Maybe (fromMaybe)
@@ -148,7 +149,7 @@ myKeys conf = M.fromList $
     [ ((myModMask ,                xK_Return ), spawn myTerminal)
     , ((myModMask ,                xK_x ),      spawn myBrowser)
     , ((myModMask ,                xK_r ),      runMenu)
-    , ((controlMask .|. shiftMask, xK_n ),      spawn "networkmanager_dmenu")
+    , ((myModMask .|. altMask,     xK_n ),      spawn "networkmanager_dmenu")
     , ((myModMask ,                xK_c ),      kill)
 
     -- Empty Workspace Movement
