@@ -190,10 +190,10 @@ myKeys conf = M.fromList $
     , ((myModMask .|. shiftMask, xK_Print ), spawn "gnome-screenshot -a")
 
     -- volume control
-    , ((noModMask,                xF86XK_AudioMute        ), spawn "xmobarPulseVolume mute")
-    , ((noModMask,                xF86XK_AudioLowerVolume ), spawn "xmobarPulseVolume down")
-    , ((noModMask,                xF86XK_AudioRaiseVolume ), spawn "xmobarPulseVolume up")
-    , ((noModMask,                xF86XK_AudioMicMute     ), spawn "xmobarPulseVolume mute-input")
+    , ((noModMask,                xF86XK_AudioMute        ), spawn "pulseaudio-ctl mute")
+    , ((noModMask,                xF86XK_AudioLowerVolume ), spawn "pulseaudio-ctl down")
+    , ((noModMask,                xF86XK_AudioRaiseVolume ), spawn "pulseaudio-ctl up")
+    , ((noModMask,                xF86XK_AudioMicMute     ), spawn "pulseaudio-ctl mute-input")
 
     -- brightness controls
     , ((noModMask,                xF86XK_MonBrightnessDown), spawn "xbacklight -dec 10%")

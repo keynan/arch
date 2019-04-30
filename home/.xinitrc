@@ -31,7 +31,7 @@ isAThing sensorsmonitor && sensorsmonitor&
 systemctl --user restart redshift 2>/dev/null &
 
 # slock the screen after 5 mins
-isAThing xautolock && isAThing slock && xautolock -locker slock -time 5 &
+isAThing xautolock && isAThing slock && xautolock -locker slock -time 5 -corners -000 &
 
 # start up nm-applet, for use by networkmanager_dmenu
 # it won't be shown without a tray however is necessary to spawn windows
