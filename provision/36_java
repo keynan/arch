@@ -2,10 +2,10 @@
 
 set -e
 
-pacman -S \
+yes | pacman -S \
   jdk8-openjdk 
 
-aura -A \
+yes | aura -A \
   jdk-adoptopenjdk 
 
 installmvnvm () {

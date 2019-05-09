@@ -9,6 +9,8 @@ if [[ ! $(cut -d: -f1 /etc/group | grep docker) ]]; then
 fi
 usermod -aG docker $SUDO_USER
 
+echo '{"default-address-pools":[{"base":"10.255.0.0/16","size":24}]}' >> /etc/docker/daemon.json
+
 systemctl enable docker
 systemctl start docker
 

@@ -2,14 +2,19 @@
 
 set -e
 
-aura -A \
+yes | sudo aura -A \
   nvm 
 
 if [[ ! $(grep NVM_DIR $HOME/.zshrc) ]]; then
-cat > $HOME/.zshrc <<EOF
+cat >> $HOME/.zshrc <<EOF
 [ -z "$NVM_DIR" ] && export NVM_DIR="$HOME/.nvm"
 source /usr/share/nvm/nvm.sh
 source /usr/share/nvm/bash_completion
 source /usr/share/nvm/install-nvm-exec
 EOF
 fi
+
+yes | pacman -S yarn
+
+nvm install 10.15.3
+nvm use 10.15.3

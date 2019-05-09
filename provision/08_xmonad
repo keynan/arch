@@ -2,6 +2,9 @@
 
 set -e 
 
+cp -r $HOME/arch/home/* $HOME/
+cp -r $HOME/arch/home/.* $HOME/
+
 if [[ $EUID -eq 0 ]]; then
 	echo "Don't run this script as root"
 	exit 1
@@ -45,10 +48,6 @@ if [[ ! -e $HOME/.xmonad/stack.yaml ]]; then
 	stack init
 	cd -
 fi
-
-curl https://raw.githubusercontent.com/keynan/arch/8b7f316264ad541f8c8a31ccf31650f908ca836d/home/.xmonad/xmonad.hs > $HOME/.xmonad/xmonad.hs
-curl https://raw.githubusercontent.com/keynan/arch/8b7f316264ad541f8c8a31ccf31650f908ca836d/home/.xmobarrc > $HOME/.xmobarrc
-curl https://raw.githubusercontent.com/keynan/arch/8b7f316264ad541f8c8a31ccf31650f908ca836d/home/.xinitrc > $HOME/.xinitrc
 
 if [[ ! -e $HOME/.xmonad/stack.yaml.bak ]]; then
 	cp $HOME/.xmonad/stack.yaml $HOME/.xmonad/stack.yaml.bak

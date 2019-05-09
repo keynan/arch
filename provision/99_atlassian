@@ -1,13 +1,14 @@
-#! /bin/bash
+#! /bin/sh
 
 set -e
 
+    
 export PATH=$PATH:$HOME/arch/home/bin
 
 if [[ ! -e $HOME/bin/mvn ]]; then
-   mkdir -p $HOME/bin
-   curl -s https://bitbucket.org/mjensen/mvnvm/raw/master/mvn > $HOME/bin/mvn
-   chmod 0755 $HOME/bin/mvn
+    mkdir -p $HOME/bin
+    curl -s https://bitbucket.org/mjensen/mvnvm/raw/master/mvn > $HOME/bin/mvn
+    chmod 0755 $HOME/bin/mvn
 fi
 
 try-to-git git@bitbucket.org:atlassian/maven-settings.git $HOME/maven-settings
@@ -18,12 +19,12 @@ fi
 if [[ ! -e $HOME/src/jira/master/.git ]]; then
     git clone ssh://git@bitbucket-mirror-au.internal.atlassian.com:7999/stash/jiracloud/jira.git $HOME/src/jira/master
     cd $HOME/src/jira/master
- 
+    
     ## use these dirs for active development, never look at ~/src/jira/master again
     git worktree add ../alpha
     git worktree add ../beta
     git worktree add ../gamma
- 
+    
     ## fix your push target so you're not pushing to the proxy
     git remote set-url --push origin ssh://git@stash.atlassian.com:7997/JIRACLOUD/jira.git
 else
@@ -51,3 +52,4 @@ if [[ ! -e $HOME/bin/micros ]]; then
     rm -f micros.tar.gz
 fi
 
+    
