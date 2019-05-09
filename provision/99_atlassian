@@ -34,6 +34,7 @@ cd $HOME/src/jira/master
 ./jmake precommit --install
 
 try-to-git git@bitbucket.org:atlassian/jira-dw-workflow.git              $HOME/src/jira/dw > /dev/null &
+try-to-git git@bitbucket.org:atlassian/go-jira.git                       $HOME/src/jira/go-jira > /dev/null &
 try-to-git git@bitbucket.org:atlassian/swift-contract-broker.git         $HOME/src/contract-broker > /dev/null &
 try-to-git git@bitbucket.org:atlassian/launcher-bot.git                  $HOME/src/launcher-bot > /dev/null &
 try-to-git git@bitbucket.org:atlassian/go-stack.git                      $HOME/src/go/go-stack > /dev/null &
@@ -51,3 +52,16 @@ if [[ ! -e $HOME/bin/micros ]]; then
     rm -f micros.tar.gz
 fi
 
+## micros login
+micros user:login
+
+## docker login
+docker login docker.atl-paas.net
+
+## install / bootstrap atlas
+curl -fL https://statlas.prod.atl-paas.net/atlas-cli/linux/atlas-latest-linux-amd64.tar.gz | tar -xz atlas
+sudo mv atlas $HOME/.local/bin/atlas
+
+atlas
+
+atlas plugin install -n slauth
