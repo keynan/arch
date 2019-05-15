@@ -1,0 +1,20 @@
+[global_config]
+  inactive_color_offset = 0.606060606061
+  title_hide_sizetext = True
+[keybindings]
+  new_tab = <Primary>t
+  next_tab = <Primary>Tab
+[layouts]
+  [[default]]
+    [[[child1]]]
+      parent = window0
+      profile = default
+      type = Terminal
+    [[[window0]]]
+      parent = ""
+      type = Window
+[plugins]
+[profiles]
+  [[default]]
+    cursor_color = "#aaaaaa"
+    scrollback_lines = 30000

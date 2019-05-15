@@ -51,10 +51,20 @@ function __prompt_command() {
     if [[ ! $EXIT -eq 0  ]]; then
 	CMD_OUTCOME_COLOR=red
     fi
+
+    TODO=""
+    if [[ $((RANDOM % 25)) -eq 0 ]]; then
+	TODO="
+===== TODO =====
+`cat ~/.todo`
+================
+
+"
+    fi
     #Red, Blue, Green, Cyan, Yellow, Magenta, Black & White
     PS1="
 %{$fg[red]%}$PS1L%{$reset_color%}`whitespace $CENTER_OFFSET`%{$fg[blue]%}$PS1C%{$reset_color%}`whitespace $RIGHT_OFFSET`%{$fg[yellow]%}$PS1R%{$reset_color%}
-%{$fg[$CMD_OUTCOME_COLOR]%}$%{$reset_color%}"
+$TODO%{$fg[$CMD_OUTCOME_COLOR]%}$%{$reset_color%}"
 }
 
 # </PROMPT>
