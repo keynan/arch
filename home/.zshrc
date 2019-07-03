@@ -69,14 +69,19 @@ $TODO%{$fg[$CMD_OUTCOME_COLOR]%}$%{$reset_color%}"
 
 # </PROMPT>
 
+DATE_FORMAT="%Y-%m-%d_%H:%M"
 RECENT_COMMAND="<zsh-start>"
+COMMAND_START=""
 function storeCommandForLog() {
     RECENT_COMMAND=$1
+    COMMAND_START=$(date +"$DATE_FORMAT")
 }
 
 function logToDevDiary() {
     if [[ $RECENT_COMMAND != "" ]]; then
-	echo "$RECENT_COMMAND" >> ~/.devlog
+	local COMMAND_END=$(date +"$DATE_FORMAT")
+	local GITBRANCH="$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null || git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+	echo "'$RECENT_COMMAND'\t$GITBRANCH\t$COMMAND_START\t$COMMAND_END" >> ~/.devlog
     fi
 }
 
