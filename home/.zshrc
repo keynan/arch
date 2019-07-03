@@ -69,7 +69,23 @@ $TODO%{$fg[$CMD_OUTCOME_COLOR]%}$%{$reset_color%}"
 
 # </PROMPT>
 
+RECENT_COMMAND="<zsh-start>"
+function storeCommandForLog() {
+    RECENT_COMMAND=$1
+}
+
+function logToDevDiary() {
+    if [[ $RECENT_COMMAND != "" ]]; then
+	echo "$RECENT_COMMAND" >> ~/.devlog
+    fi
+}
+
+function preexec() {
+    storeCommandForLog $@
+}
+
 function precmd() {
+    logToDevDiary
      __prompt_command
 }
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh

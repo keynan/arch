@@ -8,6 +8,6 @@ if [[ $PATH_AT_LOGIN == "" ]]; then
     export PATH_AT_LOGIN=$PATH
 fi
 
-export PATH=$PATH_AT_LOGIN:$HOME/bin:$HOME/.local/bin:$GOBIN:$RUSTHOME/bin
+export PATH=$HOME/bin:$HOME/.local/bin:$PATH_AT_LOGIN:$GOBIN:$RUSTHOME/bin:/usr/bin/vendor_perl
 export NIX_PATH=
 export GO111MODULE=on

@@ -1,5 +1,11 @@
 #! /bin/bash
 
+if [[ -e $HOME/bin/.local/displays-mounted ]]; then
+    echo "using local"
+    $HOME/bin/.local/displays-mounted
+    exit $?
+fi
+
 xrandr \
  --dpi 288 \
  --output eDP1 \
