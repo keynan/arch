@@ -81,7 +81,7 @@ function logToDevDiary() {
     if [[ $RECENT_COMMAND != "" ]]; then
 	local COMMAND_END=$(date +"$DATE_FORMAT")
 	local GITBRANCH="$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null || git rev-parse --abbrev-ref HEAD 2>/dev/null)"
-	echo "'$RECENT_COMMAND'\t$GITBRANCH\t$COMMAND_START\t$COMMAND_END" >> ~/.devlog
+	echo "$COMMAND_START\t$COMMAND_END\t$GITBRANCH\t\"$RECENT_COMMAND\"" >> ~/.devlog
     fi
 }
 
